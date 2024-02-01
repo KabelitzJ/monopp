@@ -26,8 +26,9 @@ find_program(
 		/usr/local/bin
 	DOC
 		"The mono executable"
-
 )
+
+MESSAGE(STATUS "MONO_EXECUTABLE: ${MONO_EXECUTABLE}")
 
 if (WIN32)
     find_program(
@@ -51,6 +52,8 @@ else ()
     )
 endif ()
 
+MESSAGE(STATUS "MONO_MCS_EXECUTABLE: ${MONO_MCS_EXECUTABLE}")
+
 find_program(
     MONO_PKG_CONFIG_EXECUTABLE
 		pkg-config
@@ -60,6 +63,8 @@ find_program(
 		/usr/bin
 		/usr/local/bin
 )
+
+MESSAGE(STATUS "MONO_PKG_CONFIG_EXECUTABLE: ${MONO_PKG_CONFIG_EXECUTABLE}")
 
 find_library(
     MONO_MAIN_LIBRARY NAMES mono-2.0 monosgen-2.0 mono-2.0-sgen
@@ -73,6 +78,8 @@ find_library(
 	DOC
 		"The mono-2.0 library"
 )
+
+MESSAGE(STATUS "MONO_MAIN_LIBRARY: ${MONO_MAIN_LIBRARY}")
 
 #find_path( mono-2.0_INCLUDE_PATH mono/jit/jit.h
 #		${MONO_DEFAULT_INSTALL_PATH}/Mono/include/*
@@ -101,22 +108,22 @@ if(MONO_EXECUTABLE AND MONO_MCS_EXECUTABLE AND MONO_PKG_CONFIG_EXECUTABLE AND MO
 
 	set(MONO_LIBRARIES "${MONO_MAIN_LIBRARY}" CACHE STRING "")
 
-    if (APPLE)
-        find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
-        set(MONO_LIBRARIES "${MONO_LIBRARIES};${CORE_FOUNDATION_LIBRARY}")
-    endif ()
+	if (APPLE)
+			find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
+			set(MONO_LIBRARIES "${MONO_LIBRARIES};${CORE_FOUNDATION_LIBRARY}")
+	endif ()
 
-    execute_process(COMMAND "${MONO_MCS_EXECUTABLE}" "--version" OUTPUT_VARIABLE MONO_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(REGEX REPLACE ".*version ([^ ]+)" "\\1" MONO_VERSION "${MONO_VERSION}")
-    message(STATUS "Found Mono version: ${MONO_MAIN_LIBRARY} (found version \"${MONO_VERSION}\")")
+	execute_process(COMMAND "${MONO_MCS_EXECUTABLE}" "--version" OUTPUT_VARIABLE MONO_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+	string(REGEX REPLACE ".*version ([^ ]+)" "\\1" MONO_VERSION "${MONO_VERSION}")
+	message(STATUS "Found Mono version: ${MONO_MAIN_LIBRARY} (found version \"${MONO_VERSION}\")")
 
 	message(STATUS "MONO_INCLUDE_PATH ${MONO_INCLUDE_PATH}")
 	message(STATUS "MONO_LIBRARY_PATH ${MONO_LIBRARY_PATH}")
 	message(STATUS "MONO_BINARY_PATH ${MONO_BINARY_PATH}")
 	message(STATUS "MONO_LIBRARIES ${MONO_LIBRARIES}")
-    message(STATUS "MONO_EXECUTABLE ${MONO_EXECUTABLE}")
-    message(STATUS "MONO_MCS_EXECUTABLE ${MONO_MCS_EXECUTABLE}")
-    message(STATUS "MONO_PKG_CONFIG_EXECUTABLE ${MONO_PKG_CONFIG_EXECUTABLE}")
-    message(STATUS "MONO_MAIN_LIBRARY ${MONO_MAIN_LIBRARY}")
+	message(STATUS "MONO_EXECUTABLE ${MONO_EXECUTABLE}")
+	message(STATUS "MONO_MCS_EXECUTABLE ${MONO_MCS_EXECUTABLE}")
+	message(STATUS "MONO_PKG_CONFIG_EXECUTABLE ${MONO_PKG_CONFIG_EXECUTABLE}")
+	message(STATUS "MONO_MAIN_LIBRARY ${MONO_MAIN_LIBRARY}")
 endif()
 
